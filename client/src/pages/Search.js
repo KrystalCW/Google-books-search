@@ -12,17 +12,17 @@ class Books extends Component {
     searchTerm: "",
   };
 
-  componentDidMount() {
-    this.loadBooks();
-  }
+  // componentDidMount() {
+  //   this.loadBooks();
+  // }
 
-  loadBooks = () => {
-    API.getBooks()
-      .then(res =>
-        this.setState({ books: res.data })
-      )
-      .catch(err => console.log(err));
-  };
+  // loadBooks = () => {
+  //   API.getBooks()
+  //     .then(res =>
+  //       this.setState({ books: res.data })
+  //     )
+  //     .catch(err => console.log(err));
+  // };
 
 
   handleInputChange = event => {
@@ -36,11 +36,23 @@ class Books extends Component {
     event.preventDefault();
     if (this.state.searchTerm) {
       API.searchBook(this.state.searchTerm)
-        // .then(res => this.setState({ books: res.data }))
-        .then(res => console.log(res.data))
+      // .then(res => console.log(res))
+        .then(res => this.setState({ books: res.data.items }))
         .catch(err => console.log(err));
     }
   };
+
+  handleSaveBook = (props) => {
+    API.saveBook({
+      title: props.title,
+      author: props.author,
+      description: props.description,
+      image: props.imgLink,
+      link: props.previewLink
+    })
+      .then(alert("Book saved successfully!"))
+      .catch(err => console.log(err));
+  }
 
   render() {
     return (
@@ -72,10 +84,46 @@ class Books extends Component {
           <Col size="md-2" />
           <Col size="md-8">
           {this.state.books.length ? (
-              <ul>{this.state.books.data}</ul>
-            ) : (
-              <h3>No Results to Display</h3>
-            )}
+              <List>
+                {this.state.books.map(book => {
+                  const title = book.volumeInfo.title;
+                  const author=book.volumeInfo.authors[0]; 
+                  const description=book.volumeInfo.description; 
+                  const imgLink=book.volumeInfo.imageLinks.smallThumbnail; 
+                  const previewLink=book.volumeInfo.previewLink;
+                  return (
+                    <ListItem key={book.id}>
+                      <a href={previewLink}>
+                        <strong id="title">
+                          <a>{title} by {author}</a>
+                        </strong>
+                      </a>
+                      <Row>
+                        <img src={imgLink} id="book-img"/>
+                      </Row>
+                      <Row>  
+                        <p>{description}</p>
+                      </Row>
+                      <Row>
+                        <FormBtn
+                          onClick={() => this.handleSaveBook(
+                            title, 
+                            author, 
+                            description, 
+                            imgLink, 
+                            previewLink)}
+                        >
+                          Save Book to List
+                        </FormBtn>
+                    </Row>
+                    </ListItem>
+                  )
+                }
+                )}
+              </List>
+              ) : (
+                <h3>No Results to Display</h3>
+              )}
           </Col>
         </Row>
         <Row>

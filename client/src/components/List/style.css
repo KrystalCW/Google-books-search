@@ -31,3 +31,17 @@
 .list-overflow-container li:last-child {
   border-bottom: none;
 }
+
+#title {
+  display: block;
+  width:100%;
+  text-align: center;
+}
+
+#book-img {
+  margin: 0 auto;
+}
+
+#title, #book-img, p {
+  padding: 0.5rem;
+}
