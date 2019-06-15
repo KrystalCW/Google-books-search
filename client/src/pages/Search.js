@@ -10,6 +10,11 @@ class Books extends Component {
   state = {
     books: [],
     searchTerm: "",
+    title: "",
+    author: "",
+    description: "",
+    image: "",
+    link: ""
   };
 
   // componentDidMount() {
@@ -43,6 +48,8 @@ class Books extends Component {
   };
 
   handleSaveBook = (props) => {
+    // event.preventDefault();
+    console.log(props);
     API.saveBook({
       title: props.title,
       author: props.author,
@@ -50,7 +57,7 @@ class Books extends Component {
       image: props.imgLink,
       link: props.previewLink
     })
-      .then(alert("Book saved successfully!"))
+      .then(res => console.log(res))
       .catch(err => console.log(err));
   }
 
@@ -95,7 +102,7 @@ class Books extends Component {
                     <ListItem key={book.id}>
                       <a href={previewLink}>
                         <strong id="title">
-                          <a>{title} by {author}</a>
+                          {title} by {author}
                         </strong>
                       </a>
                       <Row>
@@ -107,11 +114,12 @@ class Books extends Component {
                       <Row>
                         <FormBtn
                           onClick={() => this.handleSaveBook(
-                            title, 
+                            {title,
                             author, 
                             description, 
                             imgLink, 
-                            previewLink)}
+                            previewLink
+                            })}
                         >
                           Save Book to List
                         </FormBtn>
