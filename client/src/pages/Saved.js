@@ -42,11 +42,11 @@ class Detail extends Component {
               <List>
                 {this.state.books.map(book => (
                   <ListItem key={book._id}>
-                    <Link to={"/books/" + book._id}>
+                    <a href={book.link}>
                       <strong>
                         {book.title} by {book.author}
                       </strong>
-                    </Link>
+                    </a>
                     <DeleteBtn onClick={() => this.deleteBook(book._id)} />
                   </ListItem>
                 ))}
